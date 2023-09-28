@@ -121,3 +121,26 @@ function findAPI() {
     })
 }
 
+function displayCurrentWeather(data) {
+    cityEl.textContent = data.name + ": " + dayjs().format("MMM D, YYYY");
+    var weatherIcon = document.createElement("img");
+    weatherIcon.src = weatherIconUrl1 + data.weather[0].icon + weatherIconUrl2;
+    iconEl.src = weatherIconUrl1 + data.weather[0].icon + weatherIconUrl2;
+    tempEl.textContent = "Temp: " + Math.round(data.main.temp) + "°C";
+    windEl.textContent = "Wind: " + data.wind.speed + " km/h";
+    humidityEl.textContent = "Humidity: " + data.main.humidity + "%";
+    console.log(dayjs().format("DD"));
+}
+
+function displayFutureWeather(data) {
+    console.log(parseInt(dayjs().format("D")), parseInt(data.list[0].dt_txt.split(" ")[0].split("-")[2]));
+
+    for (x = 8, y = 0; x < 40; x += 8, y++) {
+        dayDateEl[y].textContent = data.list[x].dt_txt.split(" ")[0];
+        dayIconEl[y].src = weatherIconUrl1 + data.list[x].weather[0].icon + weatherIconUrl2;
+        dayTempEl[y].textContent = "Temp: " + Math.round(data.list[x].main.temp) + "°C";
+        dayWindEl[y].textContent = "Wind: " + data.list[x].wind.speed + " km/h";
+        dayHumidityEl[y].textContent = "Humidity: " + data.list[x].main.humidity + "%";
+    }
+}
+
