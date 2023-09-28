@@ -34,7 +34,6 @@ for (x = 0, y = 1; x < 5; x++, y++) {
     dayHumidityEl[x] = document.getElementById("day-" + y + "-humidity");
 }
 
-
 function init() {
     console.log(previousUserInput);
     if (!previousUserInput) {
@@ -135,7 +134,7 @@ function displayCurrentWeather(data) {
 function displayFutureWeather(data) {
     console.log(parseInt(dayjs().format("D")), parseInt(data.list[0].dt_txt.split(" ")[0].split("-")[2]));
 
-    for (x = 8, y = 0; x < 40; x += 8, y++) {
+    for (x = 0, y = 0; x < 40; x += 8, y++) {
         dayDateEl[y].textContent = data.list[x].dt_txt.split(" ")[0];
         dayIconEl[y].src = weatherIconUrl1 + data.list[x].weather[0].icon + weatherIconUrl2;
         dayTempEl[y].textContent = "Temp: " + Math.round(data.list[x].main.temp) + "°C";
@@ -144,3 +143,26 @@ function displayFutureWeather(data) {
     }
 }
 
+function historyTab(userInput) {
+    previousUserInput.unshift(userInput);
+    
+    localStorage.setItem("previousUserInput", JSON.stringify(previousUserInput));
+    displayHistory();
+}
+
+function displayHistory() {
+    for(x = 0; x < 5; x++) {
+        var searchLists = document.createElement("li");
+        searchLists.textContent = previousUserInput[x];
+        searchLists.setAttribute("data", previousUserInput[x]);
+        searchLists.setAttribute("class", "search-history-list");
+        searchLists.addEventListener("click", findPreviousWeather);
+        searchHistoryEl.appendChild(searchLists);
+    }
+
+    if (searchHistoryEl.children.length >= 10) {
+        for(x = 4; x >= 0; x--) {
+            searchHistoryEl.children[x].remove();
+        }
+    }
+}
