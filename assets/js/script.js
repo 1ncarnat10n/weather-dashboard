@@ -145,7 +145,6 @@ function displayFutureWeather(data) {
 
 function historyTab(userInput) {
     previousUserInput.unshift(userInput);
-    
     localStorage.setItem("previousUserInput", JSON.stringify(previousUserInput));
     displayHistory();
 }
@@ -166,3 +165,34 @@ function displayHistory() {
         }
     }
 }
+
+function findPreviousWeather(event) {
+    var userClick = event.target.getAttribute("data");
+    
+    fetch(apiUrl + userClick + "&appid=" + apiKey + "&units=metric")
+    .then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                console.log(data);
+                displayCurrentWeather(data);
+                historyTab(userClick);
+            })
+        }
+        else {
+            alert("Error: " + response.status);
+        }
+    })
+
+    fetch(apiUrl2 + userClick + "&appid=" + apiKey + "&units=metric")
+    .then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                console.log(data);
+                displayFutureWeather(data);
+            })
+        }
+    })
+}
+
+init();
+submitEl.addEventListener("click", findAPI);
