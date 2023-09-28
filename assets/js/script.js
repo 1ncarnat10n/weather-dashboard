@@ -1,3 +1,4 @@
+// All vars used for the script
 var userInputEl = document.getElementById("user-input");
 var submitEl = document.getElementById("submit");
 var searchHistoryEl = document.getElementById("search-history");
@@ -9,13 +10,7 @@ var tempEl = document.getElementById("temp");
 var windEl = document.getElementById("wind");
 var humidityEl = document.getElementById("humidity");
 
-var dayEl = [];
-var dayDateEl = [];
-var dayIconEl = [];
-var dayTempEl = [];
-var dayWindEl = [];
-var dayHumidityEl = [];
-
+// API and weather icons
 var weatherAPI = "https://api.openweathermap.org";
 var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q="
 var apiUrl2 = "https://api.openweathermap.org/data/2.5/forecast?q="
@@ -25,6 +20,15 @@ var weatherIconUrl2 = "@2x.png";
 
 var previousUserInput = JSON.parse(localStorage.getItem("previousUserInput"));
 
+
+var dayEl = [];
+var dayDateEl = [];
+var dayIconEl = [];
+var dayTempEl = [];
+var dayWindEl = [];
+var dayHumidityEl = [];
+
+// Elements inside the weather box
 for (x = 0, y = 1; x < 5; x++, y++) {   
     dayEl[x] = document.getElementById("day-" + y);
     dayDateEl[x] = document.getElementById("day-" + y + "-date");
@@ -34,6 +38,7 @@ for (x = 0, y = 1; x < 5; x++, y++) {
     dayHumidityEl[x] = document.getElementById("day-" + y + "-humidity");
 }
 
+// Calls and parse JSON data into displayCurrentWeather
 function init() {
     console.log(previousUserInput);
     if (!previousUserInput) {
@@ -89,6 +94,7 @@ function init() {
     }
 }
 
+// Accessing the weather API to find weather data
 function findAPI() {
     var userInput = userInputEl.value;
     userInputEl.value = "";
@@ -120,6 +126,7 @@ function findAPI() {
     })
 }
 
+// adds the current day weather box
 function displayCurrentWeather(data) {
     cityEl.textContent = data.name + ": " + dayjs().format("MMM D, YYYY");
     var weatherIcon = document.createElement("img");
@@ -131,6 +138,7 @@ function displayCurrentWeather(data) {
     console.log(dayjs().format("DD"));
 }
 
+// adds the future 5-day weather boxes
 function displayFutureWeather(data) {
     console.log(parseInt(dayjs().format("D")), parseInt(data.list[0].dt_txt.split(" ")[0].split("-")[2]));
 
@@ -143,12 +151,14 @@ function displayFutureWeather(data) {
     }
 }
 
+// uses localStorage to store the userInput
 function historyTab(userInput) {
     previousUserInput.unshift(userInput);
     localStorage.setItem("previousUserInput", JSON.stringify(previousUserInput));
     displayHistory();
 }
 
+// creates a history section from previous cities
 function displayHistory() {
     for(x = 0; x < 5; x++) {
         var searchLists = document.createElement("li");
@@ -166,6 +176,7 @@ function displayHistory() {
     }
 }
 
+// used to access previous cities on the search tab
 function findPreviousWeather(event) {
     var userClick = event.target.getAttribute("data");
     
@@ -194,5 +205,6 @@ function findPreviousWeather(event) {
     })
 }
 
+// Functionality 
 init();
 submitEl.addEventListener("click", findAPI);
